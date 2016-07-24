@@ -30,31 +30,38 @@ fn main() {
     let to = matches.value_of("to").unwrap();
     let from = matches.value_of("from").unwrap();
 
+    let output = normalize(value, from);
+    
+    print_encoding(output, to);
+}
+
+fn normalize(input: &str, encoding: &str) -> i64 {
     let mut output = Ok(0);
     
-    match from {
-        // Converts all types to store in a i64
+    match encoding {
         "binary" => {
-            output = i64::from_str_radix(value, 2);
+            output = i64::from_str_radix(input, 2);
         },
         "hex" => {
-            output = i64::from_str_radix(value, 16);
+            output = i64::from_str_radix(input, 16);
         },
         "octa" => {
-            output = i64::from_str_radix(value, 8);
+            output = i64::from_str_radix(input, 8);
         },
         "decimal" => {
-            output = value.parse::<i64>();
+            output = input.parse::<i64>();
         },
         _ => error_arg(),
     }
 
-    let output = match output {
+    match output {
         Ok(i) => { i },
         Err(err) => panic!("Conversion failed, check input. Error: {:?}", err),
-    };
+    }
+}
 
-    match to {
+fn print_encoding(output: i64, encoding: &str) {
+    match encoding {
         "binary" => println!("{:b}", output),
         "hex" => println!("{:X}", output),
         "octa" => println!("{:o}", output),
