@@ -1,0 +1,7 @@
+[package]
+name = "rustverter"
+version = "0.1.0"
+authors = ["cgm616 <cgm616@me.com>"]
+
+[dependencies]
+clap = "2"
