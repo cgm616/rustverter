@@ -35,7 +35,7 @@ fn main() {
     print_encoding(output, to);
 }
 
-fn normalize(input: &str, encoding: &str) -> i64 {
+pub fn normalize(input: &str, encoding: &str) -> i64 {
     let mut output = Ok(0);
     
     match encoding {
@@ -60,7 +60,7 @@ fn normalize(input: &str, encoding: &str) -> i64 {
     }
 }
 
-fn print_encoding(output: i64, encoding: &str) {
+pub fn print_encoding(output: i64, encoding: &str) {
     match encoding {
         "binary" => println!("{:b}", output),
         "hex" => println!("{:X}", output),
@@ -72,4 +72,27 @@ fn print_encoding(output: i64, encoding: &str) {
 
 fn error_arg() {
     panic!("Encoding not recognized. Run with `--help` or `-h` for more information.");
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn input() {
+        // Decimal normalization
+        assert_eq!(normalize("10", "decimal"), 10);
+        assert_eq!(normalize("-10", "decimal"), -10);
+
+        // Hexadecimal normalization
+        assert_eq!(normalize("DEADBEEF", "hex"), 3735928559);
+        assert_eq!(normalize("-DEADBEEF", "hex"), -3735928559);
+
+        // Octal normalization
+        assert_eq!(normalize("1232", "octa"), 666);
+        assert_eq!(normalize("-1232", "octa"), -666);
+
+        // Binary normalization
+        assert_eq!(normalize("01100011", "binary"), 99);
+        assert_eq!(normalize("-01100011", "binary"), -99);
+    }
 }
